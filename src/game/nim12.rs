@@ -17,14 +17,6 @@ pub mod nim12 {
     }
 
     impl Playable for Nim12 {
-        /*      fn new() -> Self {
-                    let retur = Nim12 {
-                        turn: false,
-                        tokens_left: 20,
-                    };
-                    return retur;
-                }
-        */
         fn reset(&mut self) -> () {
             self.turn = false;
             self.tokens_left = 20;

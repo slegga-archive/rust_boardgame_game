@@ -51,16 +51,6 @@ pub mod connect4 {
         }
     }
     impl crate::game::game::Playable for Connect4 {
-        /*     fn new() -> Self {
-                    let retur = Connect4 {
-                        turn: C4Player::Red,
-                        table: [[0; 6]; 7], //row=0 bund, 6=top
-                        is_terminated: false,
-                        winner: None,
-                    };
-                    return retur;
-                }
-        */
         fn reset(&mut self) -> () {
             self.turn = C4Player::Red;
             self.table = [[0; 6]; 7];
