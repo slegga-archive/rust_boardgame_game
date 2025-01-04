@@ -1,13 +1,8 @@
     use crate::game::GameStatic;
     use crate::game::*;
-    //use log::log_enabled;
-    //use log::Level::Debug;
     use log::{debug, info, trace};
-    //use std::collections::HashMap;
     use std::fmt::{self};
     use inline_colorization::*;
-  //  use colored::Colorize;
-    //use std::fs::ReadDir;
 
     #[derive(Debug, Clone, PartialEq)]
     enum C4Player {
