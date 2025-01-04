@@ -1,5 +1,4 @@
-pub mod connect4 {
-    use crate::game::game::GameStatic;
+    use crate::game::GameStatic;
     use crate::game::*;
     //use log::log_enabled;
     //use log::Level::Debug;
@@ -50,7 +49,7 @@ pub mod connect4 {
             return retur;
         }
     }
-    impl crate::game::game::Playable for Connect4 {
+    impl crate::game::Playable for Connect4 {
         fn reset(&mut self) -> () {
             self.turn = C4Player::Red;
             self.table = [[0; 6]; 7];
@@ -84,7 +83,7 @@ pub mod connect4 {
             }
         }
         fn get_game_static(&self) -> GameStatic {
-            let mut initial_state = vec![false; 11];
+            let mut initial_state = [false; 11];
             initial_state[0] = true;
             initial_state[2] = true;
             initial_state[6] = true;
@@ -444,7 +443,7 @@ pub mod connect4 {
         fn get_bit_state_from_bit_state_and_move(
             &self,
             perspective: &str,
-            tmp_state: &Vec<bool>,
+            tmp_state: &[bool],
             play_move: &str,
         ) -> Vec<bool> {
             let mut next_self = new_from_bit_state(perspective, tmp_state);
@@ -468,7 +467,7 @@ pub mod connect4 {
         fn get_valid_moves_from_bit_state(
             &self,
             perspective: &str,
-            tmp_state: &Vec<bool>,
+            tmp_state: &[bool],
         ) -> Vec<String> {
             let curr_self = new_from_bit_state(perspective, tmp_state);
             let retur = curr_self.get_valid_moves();
@@ -519,7 +518,7 @@ pub mod connect4 {
     // Help functions
 
     /// perspective is whom is interrested of highest score?
-    pub fn new_from_bit_state(perspective: &str, bit_state: &Vec<bool>) -> Connect4 {
+    pub fn new_from_bit_state(perspective: &str, bit_state: &[bool]) -> Connect4 {
         // bits
         // 0 -> false
         // 1 -> true
@@ -623,17 +622,17 @@ pub mod connect4 {
             Ok(())
         }
     }
-}
+
 
 #[cfg(test)]
 mod tests {
-    //use super::*;
-    use crate::game::connect4::connect4::Connect4;
-    use crate::game::game::Playable;
+    use super::*;
+    //use Connect4;
+    use crate::game::Playable;
 
     #[test]
     fn initial_state_perspective_red() {
-        let mut game = Connect4::default();
+        let game = Connect4::default();
         assert_eq!(game.get_game_static().name, "Connect4");
         let result = game.get_bit_state("Red");
         assert_eq!(result.len(), 133);
@@ -650,7 +649,7 @@ mod tests {
 
     #[test]
     fn initial_state_perspective_yellow() {
-        let mut game = Connect4::default();
+        let game = Connect4::default();
         assert_eq!(game.get_game_static().name, "Connect4");
         let result = game.get_bit_state("Yellow");
         assert_eq!(result.len(), 133);

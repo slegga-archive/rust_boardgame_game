@@ -1,8 +1,8 @@
-use crate::game::game::*;
+use crate::game::*;
 
 pub mod nim12 {
 
-    use crate::game::game::Playable;
+    use crate::game::Playable;
     use super::GameStatic;
     use log::log_enabled;
     use log::Level::Debug;
@@ -53,7 +53,7 @@ pub mod nim12 {
             }
         }
         fn get_game_static(&self) -> GameStatic {
-            let mut initial_state = vec![false; 11];
+            let mut initial_state = [false; 11];
             initial_state[0] = true;
             initial_state[2] = true;
             initial_state[6] = true;
@@ -120,7 +120,7 @@ pub mod nim12 {
         fn get_bit_state_from_bit_state_and_move(
             &self,
             _perspective: &str,
-            tmp_state: &Vec<bool>,
+            tmp_state: &[bool],
             play_move: &str,
         ) -> Vec<bool> {
             let (mut turn, mut tokens_left) = get_state_from_bit_state(tmp_state);
@@ -140,7 +140,7 @@ pub mod nim12 {
         fn get_valid_moves_from_bit_state(
             &self,
             _perspective: &str,
-            _tmp_state: &Vec<bool>,
+            _tmp_state: &[bool],
         ) -> Vec<String> {
             todo!("Unimplemented");
         }
@@ -157,14 +157,14 @@ pub mod nim12 {
         number_as_bool[0] = turn;
         number_as_bool
     }
-    fn get_state_from_bit_state(bit_state: &Vec<bool>) -> (bool, u8) {
+    fn get_state_from_bit_state(bit_state: &[bool]) -> (bool, u8) {
         //0 -> me or other
         //1 -> false
         //2 -> true
         //3 -> false=A,true=B
         //4-10 -> tokens_left
         let turn = bit_state[0];
-        let mut bit_tokens = bit_state.clone();
+        let mut bit_tokens = bit_state.to_owned();
         bit_tokens.reverse();
 
         if log_enabled!(target: "Global", Debug) {
@@ -208,7 +208,7 @@ pub mod nim12 {
             (0..8).rev().map(|i| (value & (1 << i)) != 0).collect()
         }
 
-        fn vec_bool_to_u8(vecv: &Vec<bool>) -> u8 {
+        fn vec_bool_to_u8(vecv: &[bool]) -> u8 {
             let mut value = 0;
             for (i, b) in vecv.iter().enumerate() {
                 if *b {
