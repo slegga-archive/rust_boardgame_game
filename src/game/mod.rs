@@ -5,7 +5,7 @@ pub mod connect4;
 pub mod nim12;
 
 use crate::game::connect4::Connect4;
-use crate::game::nim12::nim12::Nim12;
+use crate::game::nim12::Nim12;
 use log::trace;
 use std::fmt;
 
@@ -29,9 +29,9 @@ impl GameStatic {
         //initial_state: Vec<bool>,
     ) -> GameStatic {
         Self {
-            name: name,
-            players: players,
-            state_size: state_size,
+            name,
+            players,
+            state_size,
             //    hashmap: hashmap,
             //    all_legal_moves: all_legal_moves,
             //    initial_state,
@@ -47,14 +47,14 @@ pub trait Playable {
     //type GameStaticType: GameStatic; // Add this line
 
     // fn new() -> Self;
-    fn reset(&mut self) -> ();
+    fn reset(&mut self);
     fn get_game_static(&self) -> GameStatic; // Update this line
     fn get_valid_moves(&self) -> Vec<String>;
     fn is_terminal(&self) -> bool;
 
     fn get_winner(&self) -> Option<String>;
     fn get_active_player(&self) -> String;
-    fn play(&mut self, play_move: &str) -> ();
+    fn play(&mut self, play_move: &str);
     fn get_bit_state(&self, perspective: &str) -> Vec<bool>;
     fn get_bit_state_from_bit_state_and_move(
         &self,
@@ -67,7 +67,7 @@ pub trait Playable {
         perspective: &str,
         tmp_state: &[bool],
     ) -> Vec<String>;
-    fn pretty_print(&self)->();
+    fn pretty_print(&self);
     // fn get_bit_state_from_state(tmp_state: &Vec<bool>)->Vec<bool>;
     // fn get_state_from_bit_state()->HashMap<String, String>
 }
@@ -80,7 +80,7 @@ pub enum Game<'a> {
 // Implement the Playable trait for the Game enum.
 impl Playable for Game<'_> {
     // type Player = game::Player; // Specify the player type, which may need to be adjusted based on your code
-    fn reset(&mut self) -> () {
+    fn reset(&mut self) {
         match self {
             Game::Connect4(game) => game.reset(),
             Game::Nim12(game) => game.reset(),
@@ -116,7 +116,7 @@ impl Playable for Game<'_> {
             Game::Nim12(game) => game.get_active_player(),
         }
     }
-    fn play(&mut self, play_move: &str) -> () {
+    fn play(&mut self, play_move: &str) {
         match self {
             Game::Connect4(game) => game.play(play_move),
             Game::Nim12(game) => game.play(play_move),
@@ -155,7 +155,7 @@ impl Playable for Game<'_> {
         }
     }
 
-    fn pretty_print(&self) -> () {
+    fn pretty_print(&self) {
         match self {
             Game::Connect4(game) => game.pretty_print(),
             Game::Nim12(game) => game.pretty_print(),

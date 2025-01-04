@@ -38,24 +38,24 @@
 
     impl Default for Connect4 {
         fn default() -> Self {
-            let retur = Connect4 {
+
+            Connect4 {
                 turn: C4Player::Red,
                 table: [[0; 6]; 7],
                 is_terminated: false,
                 winner: None,
                 last_printed_table: [[0; 6]; 7],
 
-            };
-            return retur;
+            }
         }
     }
     impl crate::game::Playable for Connect4 {
-        fn reset(&mut self) -> () {
+        fn reset(&mut self) {
             self.turn = C4Player::Red;
             self.table = [[0; 6]; 7];
             self.is_terminated = false;
             self.winner = None;
-            ()
+
         }
 
         fn get_valid_moves(&self) -> Vec<String> {
@@ -74,12 +74,9 @@
         fn get_winner(&self) -> Option<String> {
             if self.is_terminated {
                 let win = self.winner.clone();
-                match win {
-                    Some(val) => Some(val.to_string()),
-                    None => None,
-                }
+                win.map(|val| val.to_string())
             } else {
-                return None;
+                None
             }
         }
         fn get_game_static(&self) -> GameStatic {
@@ -89,7 +86,8 @@
             initial_state[6] = true;
             initial_state[8] = true;
 
-            let retur = GameStatic::new(
+
+            GameStatic::new(
                 "Connect4".to_string(),
                 vec!["Red".to_string(), "Yellow".to_string()],
                 132, //not counting is_active_player_bit and always false and always true
@@ -108,18 +106,17 @@
                 ]),
                 vec!["1".to_string(), "2".to_string()],
                 initial_state,*/
-            );
-            return retur;
+            )
         }
 
         fn get_active_player(&self) -> String {
             match self.turn {
-                C4Player::Red => return "Red".to_string(),
-                C4Player::Yellow => return "Yellow".to_string(),
+                C4Player::Red => "Red".to_string(),
+                C4Player::Yellow => "Yellow".to_string(),
             }
         }
 
-        fn play(&mut self, play_move: &str) -> () {
+        fn play(&mut self, play_move: &str) {
             // Check if right player is playing
             //if player_name.to_string().ne(self.get_active_player()) {
             //    panic!("Wrong PLAYER you are {} expected {}", player_name, self.get_active_player());
@@ -184,7 +181,7 @@
                         _ => panic!("Unknown player"),
                     };
                     debug!("{} won by column", self.get_active_player());
-                    return ();
+                    return ;
                 }
             }
 
@@ -194,7 +191,7 @@
             let mut xcol: i8 = played as i8;
             while xcol > 0 {
                 xcol -= 1;
-                if current_pice == self.table[xcol as usize][row as usize] {
+                if current_pice == self.table[xcol as usize][row] {
                     in_row += 1;
                     continue;
                 }
@@ -206,7 +203,7 @@
             xcol = played as i8;
             while xcol < 6 {
                 xcol += 1;
-                if current_pice == self.table[xcol as usize][row as usize] {
+                if current_pice == self.table[xcol as usize][row] {
                     in_row += 1;
                     continue;
                 }
@@ -222,7 +219,7 @@
                     _ => panic!("Unknown player"),
                 };
                 debug!("{} won by row", self.get_active_player());
-                return ();
+                return ;
             }
 
             //check lowerleft to upper right
@@ -260,7 +257,7 @@
                     _ => panic!("Unknown player"),
                 };
                 trace!("{} won by lowerleft to upper right", self.get_active_player());
-                return ();
+                return ;
             }
 
             //check lowerright to upper left
@@ -300,19 +297,15 @@
                 debug!("{} won by upper left to lower right", self.get_active_player());
             }
             //warn!("connect4: play end win XXX");
-            if self.turn == C4Player::Yellow {
-                if self.table[0][5] > 0
+            if self.turn == C4Player::Yellow && self.table[0][5] > 0
                     && self.table[1][5] > 0
                     && self.table[2][5] > 0
                     && self.table[3][5] > 0
                     && self.table[4][5] > 0
-                    && self.table[5][5] > 0
-                    && self.table[6][5] > 0
-                {
-                    self.is_terminated = true;
-                    self.winner = None;
-                    return ();
-                }
+                    && self.table[5][5] > 0 && self.table[6][5] > 0 {
+                self.is_terminated = true;
+                self.winner = None;
+                return ;
             }
             // warn!("connect4: play before toggle XXX {}", self.turn);
 
@@ -323,14 +316,13 @@
             };
             //   warn!("connect4: play after toggle XXX {}", self.turn);
             //debug!("end of move: game state:{} => {:?}", play_move, self);
-            ()
+
         }
 
         /// perspective is a &str with either value Red or Yellow
         ///
         /// Bit_state is made for the AI and should be made with the AI in mind.
         /// What kind of bit is important for the AI?
-
         fn get_bit_state(&self, perspective: &str) -> Vec<bool> {
             // bits
             // 0 -> false
@@ -470,13 +462,13 @@
             tmp_state: &[bool],
         ) -> Vec<String> {
             let curr_self = new_from_bit_state(perspective, tmp_state);
-            let retur = curr_self.get_valid_moves();
-            retur
+
+            curr_self.get_valid_moves()
         }
 
-        fn pretty_print(&self) -> () {
-            print!(
-                "Turn: {}\n",
+        fn pretty_print(&self) {
+            println!(
+                "Turn: {}",
                 match self.turn {
                     C4Player::Red => "Red",
                     C4Player::Yellow => "Yellow",
@@ -503,13 +495,13 @@
                     }
 
                 }
-                println!("");
+                println!();
             }
             println!("1 2 3 4 5 6 7 \n");
 
             // save print state
 
-            ()
+
         }
 
 
@@ -545,17 +537,19 @@
         let turn = !bit_state[3] ^ bit_state[2]; //0 is Red, //1 is Yellow (next to do move)
 
         let mut table: [[u8; 6]; 7] = [[0; 6]; 7]; // row = 0 => bunn, 6=>topp
-        for column in 0..7 {
-            for row in 0..6 {
+        for (column, rows) in table.iter_mut().enumerate() {
+
+            // clippy complain about this line, it result in cluccy code.
+            for row in 0..rows.len() {
                 let bit_address = 7 + column + row * 7;
                 if bit_state[bit_address + 42] {
-                    table[column][row] = match perspective {
+                    rows[row] = match perspective {
                         "Red" => 1,
                         "Yellow" => 2,
                         x => panic!("Unknown perspective: {}", x),
                     }
                 } else if bit_state[bit_address + (42 * 2)] {
-                    table[column][row] = match perspective {
+                    rows[row] = match perspective {
                         "Red" => 2,
                         "Yellow" => 1,
                         x => panic!("Unknown perspective: {}", x),
@@ -584,18 +578,18 @@
             } else {
                 C4Player::Red //Red = false
             },
-            table: table.clone(),
+            table,
             is_terminated,
             winner,
-            last_printed_table: table.clone(),
+            last_printed_table: table,
         }
     }
 
     impl fmt::Display for Connect4 {
         fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-            write!(
+            writeln!(
                 f,
-                "Turn: {}\n",
+                "Turn: {}",
                 match self.turn {
                     C4Player::Red => "Red",
                     C4Player::Yellow => "Yellow",
@@ -615,9 +609,9 @@
                         }
                     )?;
                 }
-                write!(f, "\n")?;
+                writeln!(f)?;
             }
-            write!(f, "1 2 3 4 5 6 7 \n")?;
+            writeln!(f, "1 2 3 4 5 6 7 ")?;
 
             Ok(())
         }

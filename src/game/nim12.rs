@@ -1,7 +1,5 @@
 use crate::game::*;
 
-pub mod nim12 {
-
     use crate::game::Playable;
     use super::GameStatic;
     use log::log_enabled;
@@ -17,16 +15,16 @@ pub mod nim12 {
     }
 
     impl Playable for Nim12 {
-        fn reset(&mut self) -> () {
+        fn reset(&mut self) {
             self.turn = false;
             self.tokens_left = 20;
-            ()
+
         }
 
         fn get_valid_moves(&self) -> Vec<String> {
-            if &self.tokens_left == &0 {
-                return vec![];
-            } else if &self.tokens_left == &1 {
+            if self.tokens_left == 0 {
+                vec![]
+            } else if self.tokens_left == 1 {
                 return vec!["1".to_string()];
             } else {
                 return vec!["1".to_string(), "2".to_string()];
@@ -35,18 +33,14 @@ pub mod nim12 {
 
         fn is_terminal(&self) -> bool {
             let moves = &self.get_valid_moves();
-            if moves.len() > 0 {
-                return false;
-            } else {
-                return true;
-            }
+            moves.is_empty()
         }
         fn get_winner(&self) -> Option<String> {
-            if &self.is_terminal() == &true {
-                if &self.turn == &false {
-                    return Some("B".to_string());
+            if self.is_terminal() {
+                if !self.turn {
+                    Some("B".to_string())
                 } else {
-                    return Some("A".to_string());
+                    Some("A".to_string())
                 }
             } else {
                 panic!("Game is not terminalted!");
@@ -59,7 +53,8 @@ pub mod nim12 {
             initial_state[6] = true;
             initial_state[8] = true;
 
-            let retur = GameStatic::new(
+
+            GameStatic::new(
                 "1-2 Nim".to_string(),
                 vec!["A".to_string(), "B".to_string()],
                 8, //not counting is_active_player_bit and always false and always true
@@ -78,19 +73,18 @@ pub mod nim12 {
                 ]),
                 vec!["1".to_string(), "2".to_string()],
                 initial_state,*/
-            );
-            return retur;
+            )
         }
 
         fn get_active_player(&self) -> String {
-            if self.turn == false {
-                return "A".to_string();
+            if !self.turn {
+                "A".to_string()
             } else {
-                return "B".to_string();
+                "B".to_string()
             }
         }
 
-        fn play(&mut self, play_move: &str) -> () {
+        fn play(&mut self, play_move: &str) {
             // Check if right player is playing
             //if player_name.to_string().ne(self.get_active_player()) {
             //    panic!("Wrong PLAYER you are {} expected {}", player_name, self.get_active_player());
@@ -102,7 +96,7 @@ pub mod nim12 {
                     panic!("Unknown move");
                 }
             };
-            self.tokens_left = self.tokens_left - played;
+            self.tokens_left -= played;
             self.turn = !self.turn;
             debug!(
                 "end of move: game state:{} => {} {}",
@@ -132,10 +126,10 @@ pub mod nim12 {
                 }
             };
 
-            tokens_left = tokens_left - played;
+            tokens_left -= played;
             turn = !turn;
 
-            return get_bit_state_from_state(turn, tokens_left);
+            get_bit_state_from_state(turn, tokens_left)
         }
         fn get_valid_moves_from_bit_state(
             &self,
@@ -169,14 +163,14 @@ pub mod nim12 {
 
         if log_enabled!(target: "Global", Debug) {
             let mut bits = "".to_string();
-            for i in 0..bit_tokens.len() {
-                bits.push_str(format!("{}-", bit_tokens[i]).as_str());
+            for bit in &bit_tokens {
+                bits.push_str(format!("{}-", bit).as_str());
             }
             trace!("{}", bits);
         }
         let mut tokens_left = Nim12::vec_bool_to_u8(&bit_tokens); //bit∏_tokens.iter().fold(0u8, |v, b| (v << 1) + (*b as u8));
         if tokens_left >= 128 {
-            tokens_left = tokens_left - 128;
+            tokens_left -= 128;
         }
         (turn, tokens_left)
     }
@@ -218,4 +212,3 @@ pub mod nim12 {
             value
         }
     }
-}
