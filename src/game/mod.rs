@@ -221,3 +221,11 @@ pub fn get_terminal_state_from_bit_state(state: &Vec<bool>) -> Option<TerminalSt
     }
     None
 }
+
+pub fn get_active_player_from_bit_state(game_static: &GameStatic,state: &Vec<bool>) -> String{
+    if state[2] ^ state[3]{
+        game_static.players[0].clone()
+    } else {
+        game_static.players[1].clone()
+    }
+}

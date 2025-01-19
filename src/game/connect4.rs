@@ -86,21 +86,6 @@
                 "Connect4".to_string(),
                 vec!["Red".to_string(), "Yellow".to_string()],
                 132, //not counting is_active_player_bit and always false and always true
-                /*HashMap::from([
-                    ("is_active_player".to_string(), 0),
-                    ("always false".to_string(), 1),
-                    ("always true".to_string(), 2),
-                    ("turn".to_string(), 3),
-                    ("bit_1".to_string(), 4),
-                    ("bit_2".to_string(), 5),
-                    ("bit_4".to_string(), 6),
-                    ("bit_8".to_string(), 7),
-                    ("bit_16".to_string(), 8),
-                    ("bit_32".to_string(), 9),
-                    ("bit_64".to_string(), 10),
-                ]),
-                vec!["1".to_string(), "2".to_string()],
-                initial_state,*/
             )
         }
 
